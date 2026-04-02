@@ -1,0 +1,8 @@
+.env
+__pycache__/
+venv/
+*.pyc
+.DS_Store
+AegisResponse_Hackathon/.env
+AegisResponse_Hackathon/venv/
+AegisResponse_Hackathon/__pycache__/
