@@ -4,6 +4,7 @@ import {
   MapPin, Clock, Eye, Lock, Unlock, Radio, FileWarning
 } from 'lucide-react'
 import { SECURITY_EVENTS } from '../data/mockData'
+import { fetchIoTDevices, fetchIoTEvents, fetchIncidents } from '../services/api'
 import './Security.css'
 
 const CAMERAS = [
@@ -153,6 +154,37 @@ function PerimeterStatus() {
 
 export default function Security() {
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const [liveEvents, setLiveEvents] = useState(SECURITY_EVENTS)
+  const [iotDeviceCount, setIotDeviceCount] = useState(0)
+
+  useEffect(() => {
+    // Fetch real IoT events for security feed
+    fetchIoTEvents('hotel-grandview', null, 20)
+      .then(data => {
+        if (data?.events?.length) {
+          const secEvents = data.events
+            .filter(e => e.type === 'door_access' || e.type === 'motion' || e.type === 'alert')
+            .slice(0, 6)
+            .map((evt, i) => ({
+              id: `SE-LIVE-${i}`,
+              type: evt.type || 'event',
+              location: evt.location || evt.device_id || 'Unknown',
+              person: evt.authorized_by || null,
+              time: new Date(evt.timestamp || Date.now()).toLocaleTimeString('en-US', { hour12: false }),
+              status: evt.status || 'resolved',
+            }))
+          if (secEvents.length > 0) setLiveEvents([...secEvents, ...SECURITY_EVENTS.slice(secEvents.length)])
+        }
+      })
+      .catch(() => {})
+
+    // Fetch IoT devices count
+    fetchIoTDevices('hotel-grandview')
+      .then(data => {
+        if (data?.devices) setIotDeviceCount(data.devices.length)
+      })
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="security-page">
@@ -166,7 +198,7 @@ export default function Security() {
             <Camera size={12} /> {CAMERAS.filter(c => c.status === 'online').length}/{CAMERAS.length} CAMS
           </span>
           <span className="sec-stat">
-            <DoorOpen size={12} /> 42 DOORS MONITORED
+            <DoorOpen size={12} /> {iotDeviceCount || 42} DOORS MONITORED
           </span>
           <span className="sec-stat alert-stat">
             <AlertTriangle size={12} /> {CAMERAS.filter(c => c.status === 'alert').length} ALERT
@@ -223,7 +255,7 @@ export default function Security() {
             <h3>Security Events</h3>
           </div>
           <div className="card-body events-body">
-            {SECURITY_EVENTS.map(event => (
+            {liveEvents.map(event => (
               <div
                 key={event.id}
                 className={`security-event ${event.status}`}

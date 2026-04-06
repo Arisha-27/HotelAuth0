@@ -3,9 +3,10 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Map, Bot, Shield, Settings as SettingsIcon,
   Activity, ScrollText, BarChart3, ChevronLeft, ChevronRight,
-  Zap
+  Zap, Fingerprint, Cpu
 } from 'lucide-react'
 import { SYSTEM_INFO } from '../data/mockData'
+import { fetchHealth } from '../services/api'
 import './Layout.css'
 
 const NAV_ITEMS = [
@@ -16,15 +17,25 @@ const NAV_ITEMS = [
   { path: '/operations', label: 'OPERATIONS', icon: Activity },
   { path: '/analytics', label: 'ANALYTICS', icon: BarChart3 },
   { path: '/logs', label: 'EVENT LOGS', icon: ScrollText },
+  { path: '/hitl', label: 'HITL COMMAND', icon: Fingerprint },
+  { path: '/advanced', label: 'ADVANCED AI', icon: Cpu },
   { path: '/settings', label: 'SETTINGS', icon: SettingsIcon },
 ]
 
 function TopBar() {
   const [time, setTime] = useState(new Date())
+  const [backendUp, setBackendUp] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(timer)
+  }, [])
+
+  // Check backend health on mount
+  useEffect(() => {
+    fetchHealth()
+      .then(() => setBackendUp(true))
+      .catch(() => setBackendUp(false))
   }, [])
 
   const utcTime = time.toUTCString().split(' ').slice(4, 5).join('')
@@ -49,9 +60,9 @@ function TopBar() {
         <span className="topbar-date font-mono">{dateStr}</span>
       </div>
       <div className="topbar-right">
-        <span className="topbar-status font-mono">AI Status:</span>
-        <span className="status-dot active"></span>
-        <span className="topbar-status-label font-mono">OPTIMIZED</span>
+        <span className="topbar-status font-mono">Backend:</span>
+        <span className={`status-dot ${backendUp ? 'active' : ''}`}></span>
+        <span className="topbar-status-label font-mono">{backendUp ? 'CONNECTED' : 'OFFLINE'}</span>
       </div>
     </header>
   )

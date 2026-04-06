@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   BarChart3, TrendingUp, DollarSign, Users, BedDouble,
   Calendar, ArrowUpRight, ArrowDownRight
 } from 'lucide-react'
 import { REVENUE_DATA, ROOMS_DATA } from '../data/mockData'
+import { fetchFinanceSummary, fetchGuests, fetchDashboard, fetchCostSummary } from '../services/api'
 import './Analytics.css'
 
 const GUEST_STATS = {
@@ -202,6 +203,44 @@ function DeptPerformance() {
 }
 
 export default function Analytics() {
+  const [kpis, setKpis] = useState(KPI_CARDS)
+  const [guestStats, setGuestStats] = useState(GUEST_STATS)
+
+  useEffect(() => {
+    // Fetch finance summary from backend
+    fetchFinanceSummary('hotel-grandview')
+      .then(data => {
+        if (data?.total_revenue) {
+          setKpis(prev => prev.map(k => {
+            if (k.label === 'REVPAR') return { ...k, value: `$${(data.total_revenue / (data.total_rooms || 300) / 365).toFixed(2)}` }
+            return k
+          }))
+        }
+      })
+      .catch(() => {})
+
+    // Fetch real guests
+    fetchGuests()
+      .then(data => {
+        if (data?.guests?.length) {
+          const vip = data.guests.filter(g => g.vip || g.is_vip)
+          setGuestStats(prev => ({
+            ...prev,
+            totalGuests: data.guests.length,
+            vipGuests: vip.length,
+          }))
+        }
+      })
+      .catch(() => {})
+
+    // Fetch cost summary
+    fetchCostSummary()
+      .then(data => {
+        // We can overlay cost data if needed
+      })
+      .catch(() => {})
+  }, [])
+
   return (
     <div className="analytics-page">
       <div className="analytics-header">
@@ -216,7 +255,7 @@ export default function Analytics() {
 
       {/* KPI Row */}
       <div className="kpi-row">
-        {KPI_CARDS.map(kpi => (
+        {kpis.map(kpi => (
           <div key={kpi.label} className="card kpi-card">
             <div className="kpi-icon-wrap">
               <kpi.icon size={16} />

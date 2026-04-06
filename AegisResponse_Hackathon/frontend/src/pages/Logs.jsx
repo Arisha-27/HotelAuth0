@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { ScrollText, Filter, Download, Pause, Play, Search, X } from 'lucide-react'
 import { LOG_ENTRIES } from '../data/mockData'
+import { fetchAgentHistory, fetchGatewayLog } from '../services/api'
 import './Logs.css'
 
 const FULL_LOG = [
@@ -37,6 +38,37 @@ export default function Logs() {
   const [levelFilter, setLevelFilter] = useState('ALL')
   const [searchQuery, setSearchQuery] = useState('')
   const logRef = useRef(null)
+
+  // Fetch real execution history on mount
+  useEffect(() => {
+    fetchAgentHistory(30)
+      .then(data => {
+        if (data?.history?.length) {
+          const histLogs = data.history.map(h => ({
+            time: new Date(h.timestamp || Date.now()).toLocaleTimeString('en-US', { hour12: false }),
+            agent: (h.agent_id || 'EXECUTIVE').toUpperCase().replace(/-/g, '_'),
+            message: h.input || h.result || 'Execution logged',
+            level: h.status === 'error' ? 'warning' : 'action',
+          }))
+          setLogs(prev => [...histLogs, ...prev].slice(0, 100))
+        }
+      })
+      .catch(() => {})
+
+    fetchGatewayLog(null, 20)
+      .then(data => {
+        if (data?.log?.length) {
+          const gwLogs = data.log.map(l => ({
+            time: new Date(l.timestamp || Date.now()).toLocaleTimeString('en-US', { hour12: false }),
+            agent: 'GATEWAY',
+            message: `${l.service}: ${l.method} ${l.path || ''} → ${l.status || 'ok'}`,
+            level: l.status >= 400 ? 'warning' : 'info',
+          }))
+          setLogs(prev => [...gwLogs, ...prev].slice(0, 100))
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   // Add new logs periodically
   useEffect(() => {

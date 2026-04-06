@@ -1,0 +1,485 @@
+/* ═══════════════════════════════════════════════════════════
+   Phase 6 — HITL Command Center Styles
+   ═══════════════════════════════════════════════════════════ */
+
+.hitl-page {
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100%;
+}
+
+/* ── Header ── */
+.hitl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.hitl-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hitl-title h1 {
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.hitl-badge {
+  background: rgba(255, 153, 0, 0.1);
+  border: 1px solid rgba(255, 153, 0, 0.25);
+  color: #FFB84D;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+}
+
+/* ── Stats Row ── */
+.hitl-stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.hitl-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+}
+
+.hitl-stat-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+.hitl-stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.hitl-stat-sub {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+}
+
+/* ── Tabs ── */
+.hitl-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0;
+}
+
+.hitl-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.hitl-tab:hover {
+  color: var(--text-primary);
+}
+
+.hitl-tab.active {
+  color: var(--accent-primary-light);
+  border-bottom-color: var(--accent-primary);
+}
+
+/* ── Approval Cards ── */
+.approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.approval-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  transition: border-color 0.15s;
+}
+
+.approval-item:hover {
+  border-color: var(--accent-primary-muted);
+}
+
+.approval-item .crit-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.crit-badge.critical {
+  background: rgba(229, 57, 53, 0.12);
+  color: #E53935;
+  border: 1px solid rgba(229, 57, 53, 0.25);
+}
+
+.crit-badge.high {
+  background: rgba(255, 153, 0, 0.12);
+  color: #FF9900;
+  border: 1px solid rgba(255, 153, 0, 0.25);
+}
+
+.crit-badge.medium {
+  background: rgba(66, 165, 245, 0.12);
+  color: #42A5F5;
+  border: 1px solid rgba(66, 165, 245, 0.25);
+}
+
+.crit-badge.low {
+  background: rgba(180, 196, 177, 0.12);
+  color: #B4C4B1;
+  border: 1px solid rgba(180, 196, 177, 0.25);
+}
+
+.approval-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.approval-action-name {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.approval-desc {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.approval-meta {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 8px;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-approve {
+  background: rgba(76, 175, 80, 0.15);
+  color: #66BB6A;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.15s;
+}
+
+.btn-approve:hover {
+  background: rgba(76, 175, 80, 0.25);
+}
+
+.btn-deny {
+  background: rgba(229, 57, 53, 0.12);
+  color: #E53935;
+  border: 1px solid rgba(229, 57, 53, 0.25);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.15s;
+}
+
+.btn-deny:hover {
+  background: rgba(229, 57, 53, 0.22);
+}
+
+/* ── Attack Sim ── */
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.sim-scenario-card {
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sim-scenario-card:hover {
+  border-color: var(--accent-primary-muted);
+  transform: translateY(-1px);
+}
+
+.sim-scenario-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sim-scenario-desc {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.sim-result-badge {
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.sim-result-badge.pass {
+  background: rgba(76, 175, 80, 0.15);
+  color: #66BB6A;
+}
+
+.sim-result-badge.fail {
+  background: rgba(229, 57, 53, 0.15);
+  color: #E53935;
+}
+
+.sim-result-badge.pending {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+/* ── Run All Button ── */
+.btn-run-all {
+  background: linear-gradient(135deg, rgba(255, 153, 0, 0.15), rgba(255, 153, 0, 0.05));
+  color: #FFB84D;
+  border: 1px solid rgba(255, 153, 0, 0.3);
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.2s;
+}
+
+.btn-run-all:hover {
+  background: linear-gradient(135deg, rgba(255, 153, 0, 0.25), rgba(255, 153, 0, 0.1));
+  transform: translateY(-1px);
+}
+
+.btn-run-all:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Test Action Form ── */
+.test-action-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  padding: 12px;
+  align-items: end;
+}
+
+.test-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.test-field label {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.test-field select,
+.test-field input {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+}
+
+.test-field select:focus,
+.test-field input:focus {
+  outline: none;
+  border-color: var(--accent-primary-muted);
+}
+
+/* ── Consent Log ── */
+.consent-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.consent-entry {
+  display: grid;
+  grid-template-columns: 140px 100px 1fr auto;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  align-items: center;
+}
+
+.consent-entry:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.consent-hash {
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.integrity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.integrity-badge.valid {
+  background: rgba(76, 175, 80, 0.12);
+  color: #66BB6A;
+  border: 1px solid rgba(76, 175, 80, 0.25);
+}
+
+.integrity-badge.invalid {
+  background: rgba(229, 57, 53, 0.12);
+  color: #E53935;
+  border: 1px solid rgba(229, 57, 53, 0.25);
+}
+
+/* ── Anomaly Alert ── */
+.anomaly-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.anomaly-item {
+  display: grid;
+  grid-template-columns: auto 80px 1fr auto auto;
+  gap: 10px;
+  padding: 10px 14px;
+  align-items: center;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+}
+
+.anomaly-item.critical-level {
+  border-left: 3px solid #E53935;
+}
+
+.anomaly-item.high-level {
+  border-left: 3px solid #FF9900;
+}
+
+.anomaly-item.medium-level {
+  border-left: 3px solid #42A5F5;
+}
+
+.anomaly-item.low-level {
+  border-left: 3px solid #B4C4B1;
+}
+
+/* ── Section Utilities ── */
+.hitl-section {
+  margin-bottom: 8px;
+}
+
+.hitl-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Sim Summary ── */
+.sim-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sim-summary-item {
+  text-align: center;
+  padding: 12px;
+}
+
+.sim-summary-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.sim-summary-label {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.08em;
+}

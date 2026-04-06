@@ -1,0 +1,87 @@
+/* ═══════════════════════════════════════════════════════════
+   Phase 8 — Advanced Features Page Styles
+   ═══════════════════════════════════════════════════════════ */
+
+.adv-page { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; min-height: 100%; }
+
+/* Header */
+.adv-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.adv-title { display: flex; align-items: center; gap: 10px; }
+.adv-title h1 { font-size: 1rem; letter-spacing: 0.12em; font-weight: 600; }
+.adv-badge { background: rgba(138,43,226,0.1); border: 1px solid rgba(138,43,226,0.3); color: #B388FF; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; letter-spacing: 0.15em; font-weight: 600; }
+.btn-init { background: linear-gradient(135deg, rgba(138,43,226,0.15), rgba(138,43,226,0.05)); color: #B388FF; border: 1px solid rgba(138,43,226,0.3); padding: 6px 16px; border-radius: 6px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: all 0.2s; }
+.btn-init:hover { background: linear-gradient(135deg, rgba(138,43,226,0.25), rgba(138,43,226,0.1)); transform: translateY(-1px); }
+.btn-init:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Tabs */
+.adv-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
+.adv-tab { padding: 7px 12px; background: transparent; border: none; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+.adv-tab:hover { color: var(--text-primary); }
+.adv-tab.active { color: #B388FF; border-bottom-color: #9C27B0; }
+
+/* Stats bar */
+.adv-stats { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.adv-stat { display: flex; flex-direction: column; gap: 3px; padding: 10px; }
+.adv-stat-label { font-size: 0.5rem; color: var(--text-muted); letter-spacing: 0.08em; display: flex; align-items: center; gap: 4px; }
+.adv-stat-val { font-size: 1.3rem; font-weight: 700; }
+.adv-stat-sub { font-size: 0.5rem; color: var(--text-muted); }
+
+/* Prediction Cards */
+.pred-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; max-height: 420px; overflow-y: auto; }
+.pred-card { padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.15s; }
+.pred-card:hover { border-color: rgba(138,43,226,0.3); }
+.pred-bar-track { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+.pred-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+.pred-bar-fill.low { background: #66BB6A; }
+.pred-bar-fill.medium { background: #42A5F5; }
+.pred-bar-fill.high { background: #FF9900; }
+.pred-bar-fill.critical { background: #E53935; }
+
+/* Guest Profiles */
+.guest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; max-height: 420px; overflow-y: auto; }
+.guest-card { padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; }
+.tier-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; align-self: flex-start; }
+.tier-badge.platinum { background: rgba(179,136,255,0.15); color: #B388FF; border: 1px solid rgba(179,136,255,0.3); }
+.tier-badge.gold { background: rgba(255,193,7,0.15); color: #FFD54F; border: 1px solid rgba(255,193,7,0.3); }
+.tier-badge.silver { background: rgba(176,190,197,0.15); color: #B0BEC5; border: 1px solid rgba(176,190,197,0.3); }
+.tier-badge.standard { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-subtle); }
+
+/* Fraud Alerts */
+.fraud-list { display: flex; flex-direction: column; gap: 6px; max-height: 380px; overflow-y: auto; }
+.fraud-item { display: grid; grid-template-columns: auto 90px 1fr auto; gap: 10px; padding: 10px 14px; align-items: center; border-radius: 6px; }
+
+/* Cross Hotel */
+.hotel-chain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.hotel-chain-card { padding: 14px; border-radius: 8px; text-align: center; }
+.hotel-occupancy { font-size: 1.8rem; font-weight: 700; }
+
+/* Optimization */
+.opt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.opt-section { padding: 14px; border-radius: 8px; }
+.opt-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+
+/* Explainability */
+.explain-list { display: flex; flex-direction: column; gap: 10px; }
+.explain-card { padding: 14px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; }
+.explain-chain { padding: 8px 12px; border-radius: 6px; background: rgba(255,255,255,0.02); }
+.explain-step { display: flex; gap: 8px; padding: 3px 0; font-size: 0.58rem; color: var(--text-secondary); }
+.explain-step-num { color: #B388FF; font-weight: 700; min-width: 18px; }
+.explain-alt { margin-top: 4px; font-size: 0.55rem; padding: 4px 8px; background: rgba(255,255,255,0.02); border-radius: 4px; }
+
+/* Chaos */
+.chaos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.chaos-card { padding: 12px; border-radius: 8px; cursor: pointer; transition: all 0.15s; display: flex; flex-direction: column; gap: 5px; }
+.chaos-card:hover { transform: translateY(-1px); border-color: rgba(138,43,226,0.3); }
+.resilience-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.resilience-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+
+/* Utilities */
+.risk-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.risk-badge.critical { background: rgba(229,57,53,0.12); color: #E53935; }
+.risk-badge.high { background: rgba(255,153,0,0.12); color: #FF9900; }
+.risk-badge.medium { background: rgba(66,165,245,0.12); color: #42A5F5; }
+.risk-badge.low { background: rgba(102,187,106,0.12); color: #66BB6A; }
+.risk-badge.clear { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.empty-state-adv { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.65rem; }

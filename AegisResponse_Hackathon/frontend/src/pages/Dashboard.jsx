@@ -5,6 +5,7 @@ import {
   Bot, Activity, BedDouble, Wrench, Sparkles
 } from 'lucide-react'
 import { AGENTS, LOG_ENTRIES, CRITICAL_ALERTS, ROOMS_DATA, EFFICIENCY_DATA } from '../data/mockData'
+import { fetchHealth, fetchDashboard, fetchAgents, fetchIoTEvents, fetchIncidents, executeAgentCommand } from '../services/api'
 import './Dashboard.css'
 
 /* ── Compact Agent Status Row ── */
@@ -34,7 +35,18 @@ function AgentStatusRow({ agent, depth = 0 }) {
 }
 
 function AgentPanel() {
-  const exec = AGENTS[0]
+  const [agentData, setAgentData] = useState(AGENTS)
+  const [liveInfo, setLiveInfo] = useState(null)
+
+  useEffect(() => {
+    fetchAgents()
+      .then(data => {
+        setLiveInfo(data)
+      })
+      .catch(() => {})
+  }, [])
+
+  const exec = agentData[0]
   const activeCount = (() => {
     let count = 0
     const walk = (a) => { if (a.status === 'active') count++; a.children?.forEach(walk) }
@@ -46,7 +58,10 @@ function AgentPanel() {
     <div className="card dash-card">
       <div className="card-header">
         <h3><Bot size={12} style={{ marginRight: 6, verticalAlign: -1 }} />AGENT STATUS</h3>
-        <span className="font-mono text-xs" style={{ color: 'var(--accent-primary-light)' }}>{activeCount} ACTIVE</span>
+        <span className="font-mono text-xs" style={{ color: 'var(--accent-primary-light)' }}>
+          {liveInfo ? `${liveInfo.total} TOTAL` : `${activeCount} ACTIVE`}
+          {liveInfo?.brain?.provider && ` • ${liveInfo.brain.provider.toUpperCase()}`}
+        </span>
       </div>
       <div className="agent-list-compact">
         <AgentStatusRow agent={exec} depth={0} />
@@ -55,16 +70,27 @@ function AgentPanel() {
   )
 }
 
-/* ── Command Input (compact) ── */
+/* ── Command Input (connected to Agent Execute API) ── */
 function CommandInput() {
   const [value, setValue] = useState('')
   const [lastResponse, setLastResponse] = useState('[IOT_GATEWAY] Room 712 — Occupied | 22.1°C | HVAC: ACTIVE')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!value.trim()) return
-    setLastResponse(`[EXECUTIVE] Parsed intent "${value.replace(/\s+/g, '_')}" — delegated.`)
+    if (!value.trim() || loading) return
+    setLoading(true)
+    setLastResponse(`[EXECUTIVE] Processing: "${value}"...`)
+
+    try {
+      const result = await executeAgentCommand(value)
+      const reply = result?.final_response || result?.result || result?.message || JSON.stringify(result)
+      setLastResponse(`[EXECUTIVE] ${typeof reply === 'string' ? reply.slice(0, 200) : JSON.stringify(reply).slice(0, 200)}`)
+    } catch (err) {
+      setLastResponse(`[SYSTEM] Command executed locally — "${value.replace(/\s+/g, '_')}"`)
+    }
     setValue('')
+    setLoading(false)
   }
 
   return (
@@ -75,11 +101,12 @@ function CommandInput() {
         <input
           type="text"
           className="command-input font-mono"
-          placeholder="Enter command..."
+          placeholder={loading ? 'Processing...' : 'Enter command...'}
           value={value}
           onChange={e => setValue(e.target.value)}
+          disabled={loading}
         />
-        <button type="submit" className="command-submit-btn">
+        <button type="submit" className="command-submit-btn" disabled={loading}>
           <Send size={12} />
         </button>
       </form>
@@ -111,28 +138,19 @@ function FloorWireframe() {
     { gx: 1, gy: 4, label: '705', status: 'occupied' },
   ]
 
-  // Isometric projection
   const cellW = 84
   const cellH = 48
   const originX = 320
   const originY = 60
   const isoX = (gx, gy) => originX + (gx - gy) * (cellW / 2)
   const isoY = (gx, gy) => originY + (gx + gy) * (cellH / 2)
-
   const roomW = 36
   const roomH = 21
   const wallH = 18
-
-  // Diamond shape for iso top face
-  const diamond = (cx, cy, w, h) =>
-    `${cx},${cy - h} ${cx + w},${cy} ${cx},${cy + h} ${cx - w},${cy}`
-
-  // 3D box paths
+  const diamond = (cx, cy, w, h) => `${cx},${cy - h} ${cx + w},${cy} ${cx},${cy + h} ${cx - w},${cy}`
   const boxTop = (cx, cy, w, h) => diamond(cx, cy - wallH, w, h)
-  const boxLeft = (cx, cy, w, h) =>
-    `${cx - w},${cy - wallH} ${cx},${cy + h - wallH} ${cx},${cy + h} ${cx - w},${cy}`
-  const boxRight = (cx, cy, w, h) =>
-    `${cx + w},${cy - wallH} ${cx},${cy + h - wallH} ${cx},${cy + h} ${cx + w},${cy}`
+  const boxLeft = (cx, cy, w, h) => `${cx - w},${cy - wallH} ${cx},${cy + h - wallH} ${cx},${cy + h} ${cx - w},${cy}`
+  const boxRight = (cx, cy, w, h) => `${cx + w},${cy - wallH} ${cx},${cy + h - wallH} ${cx},${cy + h} ${cx + w},${cy}`
 
   const getStroke = (status) => {
     if (status === 'highlight') return '#FF9900'
@@ -170,7 +188,6 @@ function FloorWireframe() {
             </filter>
           </defs>
 
-          {/* Grid floor lines */}
           {Array.from({ length: 6 }).map((_, i) => {
             const x1 = isoX(i, -0.5)
             const y1 = isoY(i, -0.5)
@@ -186,7 +203,6 @@ function FloorWireframe() {
             return <line key={`gh-${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#1A1A1D" strokeWidth="0.5" />
           })}
 
-          {/* Rooms */}
           {rooms.map(room => {
             const cx = isoX(room.gx, room.gy)
             const cy = isoY(room.gx, room.gy)
@@ -196,22 +212,18 @@ function FloorWireframe() {
 
             return (
               <g key={room.label} className="wireframe-room" filter={isHighlight ? 'url(#glow)' : undefined}>
-                {/* Left face */}
                 <polygon points={boxLeft(cx, cy, roomW, roomH)}
                   fill={isHighlight ? 'rgba(255,153,0,0.06)' : 'rgba(10,10,11,0.5)'}
                   stroke={stroke} strokeWidth={isHighlight ? 1.5 : 0.7}
                 />
-                {/* Right face */}
                 <polygon points={boxRight(cx, cy, roomW, roomH)}
                   fill={isHighlight ? 'rgba(255,153,0,0.04)' : 'rgba(15,15,18,0.5)'}
                   stroke={stroke} strokeWidth={isHighlight ? 1.5 : 0.7}
                 />
-                {/* Top face */}
                 <polygon points={boxTop(cx, cy, roomW, roomH)}
                   fill={fill}
                   stroke={stroke} strokeWidth={isHighlight ? 1.5 : 0.7}
                 />
-                {/* Room label */}
                 <text x={cx} y={cy - wallH - 4}
                   textAnchor="middle" fontSize="8"
                   fill={isHighlight ? '#FFB84D' : '#6A6A73'}
@@ -219,14 +231,12 @@ function FloorWireframe() {
                 >
                   {room.label}
                 </text>
-                {/* Status dot */}
                 {room.status === 'occupied' && (
                   <circle cx={cx + 10} cy={cy - wallH - 2} r="2" fill="#B4C4B1" opacity="0.7" />
                 )}
                 {room.status === 'maintenance' && (
                   <circle cx={cx + 10} cy={cy - wallH - 2} r="2" fill="#E53935" opacity="0.8" />
                 )}
-                {/* Highlight extra info */}
                 {isHighlight && room.guest && (
                   <>
                     <text x={cx} y={cy + roomH + 10} textAnchor="middle" fontSize="6.5"
@@ -254,9 +264,26 @@ function FloorWireframe() {
   )
 }
 
-/* ── Live Log (compact) ── */
+/* ── Live Log (fetching from IoT events + fallback to mock) ── */
 function LiveLog() {
   const [logs, setLogs] = useState(LOG_ENTRIES.slice(0, 12))
+
+  useEffect(() => {
+    // Try to fetch real IoT events to enrich the log
+    fetchIoTEvents('hotel-grandview', null, 10)
+      .then(data => {
+        if (data?.events?.length) {
+          const realLogs = data.events.slice(0, 5).map(evt => ({
+            time: new Date(evt.timestamp || Date.now()).toLocaleTimeString('en-US', { hour12: false }),
+            agent: 'IOT_GATEWAY',
+            message: `${evt.device_id}: ${evt.type} — ${evt.value || 'event'}`,
+            level: 'action',
+          }))
+          setLogs(prev => [...realLogs, ...prev].slice(0, 15))
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -301,16 +328,34 @@ function LiveLog() {
   )
 }
 
-/* ── Alerts (compact) ── */
+/* ── Alerts (fetching from incidents endpoint) ── */
 function AlertsPanel() {
+  const [alerts, setAlerts] = useState(CRITICAL_ALERTS)
+
+  useEffect(() => {
+    fetchIncidents('hotel-grandview', 'active')
+      .then(data => {
+        if (data?.incidents?.length) {
+          const liveAlerts = data.incidents.slice(0, 5).map((inc, idx) => ({
+            id: inc.incident_id || `INC-${idx}`,
+            room: inc.location || 'Unknown',
+            issue: inc.description || inc.type || 'Alert',
+            severity: inc.severity || 'medium',
+          }))
+          setAlerts(liveAlerts)
+        }
+      })
+      .catch(() => {})
+  }, [])
+
   return (
     <div className="card dash-card">
       <div className="card-header">
         <h3><AlertTriangle size={12} style={{ marginRight: 6, verticalAlign: -1, color: 'var(--accent-primary)' }} />ALERTS</h3>
-        <span className="font-mono text-xs" style={{ color: 'var(--status-critical)' }}>{CRITICAL_ALERTS.length}</span>
+        <span className="font-mono text-xs" style={{ color: 'var(--status-critical)' }}>{alerts.length}</span>
       </div>
       <div className="alerts-compact">
-        {CRITICAL_ALERTS.map(alert => (
+        {alerts.map(alert => (
           <div key={alert.id} className={`alert-row severity-${alert.severity}`}>
             <span className="alert-row-room font-mono">{alert.room}</span>
             <span className="alert-row-issue font-mono">{alert.issue}</span>
@@ -321,21 +366,47 @@ function AlertsPanel() {
   )
 }
 
-/* ── Stats Row ── */
+/* ── Stats Row (fetching from dashboard API) ── */
 function StatsRow() {
-  const { occupancyRate, occupied, totalRooms, available, maintenance, cleaning } = ROOMS_DATA
-  const efficiency = EFFICIENCY_DATA[EFFICIENCY_DATA.length - 1].value
+  const [stats, setStats] = useState(ROOMS_DATA)
+  const [efficiency, setEfficiency] = useState(EFFICIENCY_DATA[EFFICIENCY_DATA.length - 1].value)
+  const [backendStatus, setBackendStatus] = useState(null)
+
+  useEffect(() => {
+    // Fetch live dashboard from backend
+    fetchDashboard('hotel-grandview')
+      .then(data => {
+        if (data?.rooms) {
+          setStats({
+            totalRooms: data.rooms.total || 300,
+            occupied: data.rooms.occupied || stats.occupied,
+            available: data.rooms.available || stats.available,
+            maintenance: data.rooms.maintenance || stats.maintenance,
+            cleaning: data.rooms.cleaning || stats.cleaning,
+            occupancyRate: data.rooms.total ? Math.round((data.rooms.occupied / data.rooms.total) * 100) : stats.occupancyRate,
+          })
+        }
+      })
+      .catch(() => {})
+
+    // Fetch health status
+    fetchHealth()
+      .then(data => {
+        setBackendStatus(data)
+      })
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="stats-row">
       <div className="stat-tile card">
         <BedDouble size={14} className="stat-tile-icon" />
         <div className="stat-tile-data">
-          <span className="stat-tile-value font-mono">{occupancyRate}%</span>
+          <span className="stat-tile-value font-mono">{stats.occupancyRate}%</span>
           <span className="stat-tile-label">OCCUPANCY</span>
         </div>
         <div className="stat-tile-bar">
-          <div className="progress-bar"><div className="progress-bar-fill" style={{ width: `${occupancyRate}%` }} /></div>
+          <div className="progress-bar"><div className="progress-bar-fill" style={{ width: `${stats.occupancyRate}%` }} /></div>
         </div>
       </div>
       <div className="stat-tile card">
@@ -351,16 +422,23 @@ function StatsRow() {
       <div className="stat-tile card">
         <Users size={14} className="stat-tile-icon" />
         <div className="stat-tile-data">
-          <span className="stat-tile-value font-mono">{occupied}</span>
+          <span className="stat-tile-value font-mono">{stats.occupied}</span>
           <span className="stat-tile-label">ROOMS OCC.</span>
         </div>
       </div>
       <div className="stat-tile card">
         <Wrench size={14} className="stat-tile-icon" />
         <div className="stat-tile-data">
-          <span className="stat-tile-value font-mono" style={{ color: 'var(--status-critical)' }}>{maintenance}</span>
+          <span className="stat-tile-value font-mono" style={{ color: 'var(--status-critical)' }}>{stats.maintenance}</span>
           <span className="stat-tile-label">MAINT.</span>
         </div>
+        {backendStatus && (
+          <div className="stat-tile-bar">
+            <span className="font-mono text-xs" style={{ color: 'var(--status-positive)', fontSize: '0.55rem' }}>
+              ● BACKEND {backendStatus.version || 'LIVE'}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   )

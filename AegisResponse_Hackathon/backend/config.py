@@ -60,8 +60,12 @@ class Settings:
     TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
     TWILIO_FROM_NUMBER: str = os.getenv("TWILIO_FROM_NUMBER", "+15551234567")
 
-    # ── Phase 5: Claude / Anthropic ────────────────────────
-    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
+    # ── Phase 4: Pluggable LLM Brain ───────────────────────
+    # Set LLM_PROVIDER to: mock, openai, gemini, mistral, ollama, custom
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "mock")
+    LLM_API_BASE: str = os.getenv("LLM_API_BASE", "")
+    LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
+    LLM_MODEL: str = os.getenv("LLM_MODEL", "gpt-4o-mini")
 
     def validate(self) -> list[str]:
         """Return list of missing required configuration keys."""

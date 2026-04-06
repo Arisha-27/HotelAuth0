@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Settings as SettingsIcon, User, Bell, Shield, Palette,
   Database, Globe, Key, Monitor, Save, RotateCcw, ToggleLeft, ToggleRight
 } from 'lucide-react'
+import { fetchHealth, fetchCacheStats } from '../services/api'
 import './Settings.css'
 
 function Toggle({ checked, onChange, label }) {
@@ -65,6 +66,14 @@ export default function Settings() {
     language: 'en',
     dateFormat: 'DD/MM/YYYY',
   })
+
+  const [backendHealth, setBackendHealth] = useState(null)
+
+  useEffect(() => {
+    fetchHealth()
+      .then(data => setBackendHealth(data))
+      .catch(() => {})
+  }, [])
 
   const update = (key, value) => setSettings(prev => ({ ...prev, [key]: value }))
 
@@ -233,7 +242,7 @@ export default function Settings() {
             <input
               type="text"
               className="input font-mono"
-              value="https://api.ahos.grandview.com/v5"
+              value={backendHealth ? `http://127.0.0.1:8000 (${backendHealth.status})` : 'http://127.0.0.1:8000'}
               readOnly
               style={{ maxWidth: '300px' }}
             />
@@ -250,7 +259,9 @@ export default function Settings() {
           <SettingRow label="IoT Gateway" description="Device management endpoint">
             <div className="endpoint-status">
               <span className="status-dot active" />
-              <span className="font-mono text-xs">Connected — 312 devices</span>
+              <span className="font-mono text-xs">
+                Connected — {backendHealth?.services?.iot_simulator?.devices || 312} devices
+              </span>
             </div>
           </SettingRow>
         </SettingSection>
@@ -260,7 +271,7 @@ export default function Settings() {
           <div className="system-info-grid">
             <div className="sys-info-item">
               <span className="sys-label text-xs text-muted uppercase">Version</span>
-              <span className="sys-value font-mono">AHOS V5.2.1</span>
+              <span className="sys-value font-mono">AHOS {backendHealth?.version || 'V5.2.1'}</span>
             </div>
             <div className="sys-info-item">
               <span className="sys-label text-xs text-muted uppercase">Build</span>
@@ -272,7 +283,9 @@ export default function Settings() {
             </div>
             <div className="sys-info-item">
               <span className="sys-label text-xs text-muted uppercase">Backend</span>
-              <span className="sys-value font-mono">FastAPI 0.104.1</span>
+              <span className="sys-value font-mono">
+                FastAPI {backendHealth ? `— ${backendHealth.uptime || 'running'}` : '0.104.1'}
+              </span>
             </div>
             <div className="sys-info-item">
               <span className="sys-label text-xs text-muted uppercase">AI Engine</span>

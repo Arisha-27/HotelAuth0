@@ -24,6 +24,15 @@ from backend.routes.finance import router as finance_router
 # Router — Phase 5: External Integrations
 from backend.routes.integrations import router as integrations_router
 
+# Router — Phase 4: Hierarchical Agent System
+from backend.routes.agents import router as agents_router
+
+# Router — Phase 6: Human-in-the-Loop + Security
+from backend.routes.hitl import router as hitl_router
+
+# Router — Phase 8: Advanced Features
+from backend.routes.advanced import router as advanced_router
+
 # Ensure structured logging is initialized immediately
 setup_logging(log_level=settings.LOG_LEVEL, log_file=settings.LOG_FILE)
 logger = get_logger("main")
@@ -70,8 +79,13 @@ async def lifespan(app: FastAPI):
     logger.info(f"📋 Notion: {'configured' if notion_service.is_configured else 'mock mode'}")
     logger.info(f"📱 Twilio: {'configured' if twilio_service.is_configured else 'mock mode'}")
 
+    # ── Phase 4: Initialize Agent System ──
+    from backend.agents.registry import agent_registry
+    agents = agent_registry.list_agents()
+    logger.info(f"🧠 Agent System: {len(agents)} agents initialized (brain: {agent_registry.get_brain_info().get('provider', 'unknown')})")
+
     logger.info("═" * 60)
-    logger.info("🚀  AHOS Phase 3+5 — All Systems READY")
+    logger.info("🚀  AHOS Phase 3+4+5 — All Systems READY")
     logger.info("═" * 60)
 
     yield  # Application runs
@@ -89,7 +103,9 @@ app = FastAPI(
     description=(
         "Aegis Hospitality OS — Research-Grade Multi-Agent Hotel Chain Operating System\n\n"
         "**Phase 3**: Core Backend (Auth, Middleware, Orchestrator)\n"
-        "**Phase 5**: External Integrations (Gmail, Notion, Twilio, IoT, DB, Gateway, Monitoring)"
+        "**Phase 4**: Hierarchical Agent System (Executive → Domain → Sub-Agents, Pluggable LLM Brain)\n"
+        "**Phase 5**: External Integrations (Gmail, Notion, Twilio, IoT, DB, Gateway, Monitoring)\n"
+        "**Phase 6**: Human-in-the-Loop + Security (Approvals, Consent Logs, Anomaly Detection, Attack Sim)"
     ),
     lifespan=lifespan,
 )
@@ -122,6 +138,15 @@ app.include_router(finance_router)
 
 # Register API Router — Phase 5: External Integrations
 app.include_router(integrations_router, prefix="/api/v1")
+
+# Register API Router — Phase 4: Hierarchical Agent System
+app.include_router(agents_router, prefix="/api/v1")
+
+# Register API Router — Phase 6: Human-in-the-Loop + Security
+app.include_router(hitl_router)
+
+# Register API Router — Phase 8: Advanced Features
+app.include_router(advanced_router)
 
 
 # Provide root endpoints to ease navigation

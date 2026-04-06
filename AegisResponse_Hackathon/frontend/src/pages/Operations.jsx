@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Activity, Wrench, Sparkles, Thermometer, Zap,
   Clock, CheckCircle2, AlertCircle, ArrowRight, Users
 } from 'lucide-react'
 import { HOUSEKEEPING_TASKS, FLOOR_DATA, ROOMS_DATA } from '../data/mockData'
+import { fetchRooms, fetchDashboard, fetchIncidents, fetchIoTSummary } from '../services/api'
 import './Operations.css'
 
 const WORK_ORDERS = [
@@ -160,7 +161,45 @@ function FloorOverview() {
 }
 
 export default function Operations() {
-  const roomStats = ROOMS_DATA
+  const [roomStats, setRoomStats] = useState(ROOMS_DATA)
+  const [liveWorkOrders, setLiveWorkOrders] = useState(WORK_ORDERS)
+
+  useEffect(() => {
+    // Fetch live dashboard stats
+    fetchDashboard('hotel-grandview')
+      .then(data => {
+        if (data?.rooms) {
+          setRoomStats({
+            totalRooms: data.rooms.total || ROOMS_DATA.totalRooms,
+            occupied: data.rooms.occupied || ROOMS_DATA.occupied,
+            available: data.rooms.available || ROOMS_DATA.available,
+            maintenance: data.rooms.maintenance || ROOMS_DATA.maintenance,
+            cleaning: data.rooms.cleaning || ROOMS_DATA.cleaning,
+            occupancyRate: data.rooms.total ? Math.round((data.rooms.occupied / data.rooms.total) * 100) : ROOMS_DATA.occupancyRate,
+          })
+        }
+      })
+      .catch(() => {})
+
+    // Fetch incidents as work orders
+    fetchIncidents('hotel-grandview')
+      .then(data => {
+        if (data?.incidents?.length) {
+          const liveOrders = data.incidents.slice(0, 6).map((inc, i) => ({
+            id: inc.incident_id || `WO-LIVE-${i}`,
+            room: inc.location || 'N/A',
+            issue: inc.description || inc.type || 'Issue reported',
+            priority: inc.severity || 'medium',
+            status: inc.status || 'pending',
+            assignee: inc.assigned_to || 'Unassigned',
+            created: new Date(inc.created_at || Date.now()).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+            eta: inc.eta || 'TBD',
+          }))
+          setLiveWorkOrders([...liveOrders, ...WORK_ORDERS.slice(liveOrders.length)])
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="operations-page">

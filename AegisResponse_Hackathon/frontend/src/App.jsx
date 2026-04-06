@@ -8,6 +8,8 @@ import Operations from './pages/Operations'
 import Analytics from './pages/Analytics'
 import Logs from './pages/Logs'
 import Settings from './pages/Settings'
+import HITL from './pages/HITL'
+import Advanced from './pages/Advanced'
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path="operations" element={<Operations />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="logs" element={<Logs />} />
+        <Route path="hitl" element={<HITL />} />
+        <Route path="advanced" element={<Advanced />} />
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
