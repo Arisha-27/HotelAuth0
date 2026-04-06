@@ -1,0 +1,227 @@
+/* === Logs Page === */
+.logs-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  height: calc(100vh - 42px - var(--gap-md) * 2);
+}
+
+.logs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--gap-md);
+}
+
+.logs-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logs-title h1 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.logs-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.log-count {
+  margin-right: var(--gap-sm);
+}
+
+/* Filters */
+.logs-filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.filter-search {
+  position: relative;
+  max-width: 400px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.search-clear:hover {
+  color: var(--text-primary);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  padding: 4px 8px;
+  font-size: 0.6rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-pill:hover {
+  border-color: var(--border-hover);
+  color: var(--text-secondary);
+}
+
+.filter-pill.active {
+  background: var(--accent-primary-dim);
+  border-color: rgba(255,153,0,0.25);
+  color: var(--accent-primary-light);
+}
+
+.filter-pill.level-warning.active {
+  background: var(--accent-primary-dim);
+}
+
+.filter-pill.level-action.active {
+  background: var(--status-positive-dim);
+  border-color: rgba(180,196,177,0.25);
+  color: var(--status-positive);
+}
+
+.pill-count {
+  font-size: 0.5rem;
+  opacity: 0.6;
+}
+
+/* Log Table */
+.logs-table-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.logs-table-header {
+  display: flex;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-default);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.logs-table-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.log-table-row {
+  display: flex;
+  padding: 6px 12px;
+  font-size: 0.68rem;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
+  align-items: flex-start;
+}
+
+.log-table-row:hover {
+  background: var(--accent-primary-faint);
+}
+
+.log-table-row.warning {
+  background: rgba(255,153,0,0.04);
+  border-left: 2px solid var(--accent-primary);
+}
+
+.log-table-row.new-entry {
+  animation: fadeIn 0.3s ease-out;
+  background: rgba(255,153,0,0.06);
+}
+
+.log-col-time {
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.log-col-agent {
+  width: 120px;
+  flex-shrink: 0;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.log-col-level {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.log-col-message {
+  flex: 1;
+  color: var(--text-secondary);
+  word-break: break-word;
+}
+
+.level-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+}
+
+.level-badge.info {
+  color: var(--text-muted);
+  background: rgba(90,90,99,0.1);
+}
+
+.level-badge.action {
+  color: var(--status-positive);
+  background: var(--status-positive-dim);
+}
+
+.level-badge.warning {
+  color: var(--accent-primary-light);
+  background: var(--accent-primary-dim);
+}
+
+@media (max-width: 768px) {
+  .log-col-agent { width: 80px; }
+  .log-col-level { width: 60px; }
+}

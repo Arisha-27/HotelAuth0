@@ -1,0 +1,242 @@
+/* === Agents Page === */
+.agents-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.agents-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.agents-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agents-title h1 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ── Topology Card ── */
+.topology-card {
+  overflow: hidden;
+}
+
+.topology-body {
+  flex: 1;
+  padding: var(--gap-sm);
+  overflow: hidden;
+}
+
+.topology-svg {
+  width: 100%;
+  height: auto;
+  max-height: 440px;
+}
+
+.topology-node-group {
+  cursor: pointer;
+}
+
+.topology-node-group:hover rect {
+  stroke-width: 2;
+  filter: brightness(1.1);
+}
+
+/* ── Bottom: Agent List + Detail ── */
+.agents-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-md);
+}
+
+.agents-list-card {
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.agents-list-body {
+  overflow-y: auto;
+}
+
+.agent-list-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.agent-list-item:hover {
+  background: var(--accent-primary-faint);
+}
+
+.agent-list-item.selected {
+  background: var(--accent-primary-dim);
+  border-left: 2px solid var(--accent-primary);
+}
+
+.agent-list-name {
+  flex: 1;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.agent-list-version {
+  flex-shrink: 0;
+}
+
+/* ── Detail Card ── */
+.agent-detail-card {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.agent-detail-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-lg);
+}
+
+.agent-metric-box {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg-canvas-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.metric-icon {
+  color: var(--accent-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.metric-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.metric-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.metric-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.agent-info-row {
+  display: flex;
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-lg);
+}
+
+.agent-info-item {
+  flex: 1;
+  padding: 8px 10px;
+  background: var(--bg-canvas-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.info-label {
+  display: block;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.info-value {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+/* Tasks */
+.agent-tasks-section {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--gap-md);
+}
+
+.agent-tasks-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 0;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.agent-tasks-toggle .rotated {
+  transform: rotate(90deg);
+}
+
+.agent-tasks-list {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.agent-task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.task-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.task-status-dot.positive { background: var(--status-positive); }
+.task-status-dot.active { background: var(--accent-primary); }
+
+.task-name {
+  flex: 1;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.task-time {
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .agents-bottom {
+    grid-template-columns: 1fr;
+  }
+}

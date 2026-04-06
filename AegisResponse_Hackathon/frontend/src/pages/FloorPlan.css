@@ -1,0 +1,223 @@
+/* === Floor Plan Page === */
+.floorplan-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  height: calc(100vh - 42px - var(--gap-md) * 2);
+}
+
+.floorplan-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--gap-md);
+}
+
+.floorplan-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.floorplan-title h2 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.floorplan-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.view-mode-group {
+  display: flex;
+  gap: 2px;
+}
+
+.view-mode-group .btn {
+  border-radius: 0;
+}
+
+.view-mode-group .btn:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.view-mode-group .btn:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Floor selector */
+.floor-selector-wrap {
+  position: relative;
+}
+
+.floor-picker {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 160px;
+  padding: var(--gap-xs);
+  z-index: var(--z-dropdown);
+  max-height: 300px;
+  overflow-y: auto;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.floor-picker-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.floor-picker-item:hover {
+  background: var(--accent-primary-faint);
+  color: var(--text-primary);
+}
+
+.floor-picker-item.active {
+  background: var(--accent-primary-dim);
+  color: var(--accent-primary-light);
+}
+
+/* Stats Bar */
+.floorplan-stats {
+  display: flex;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Main area */
+.floorplan-main {
+  flex: 1;
+  display: flex;
+  gap: var(--gap-md);
+  min-height: 0;
+}
+
+.floorplan-canvas-container {
+  flex: 1;
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.floorplan-canvas-container canvas {
+  border-radius: var(--radius-md);
+}
+
+.canvas-overlay-info {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Room detail panel */
+.room-detail-panel {
+  width: 280px;
+  flex-shrink: 0;
+  height: fit-content;
+  max-height: 100%;
+  overflow-y: auto;
+  animation: slideInRight 0.2s ease-out;
+}
+
+.room-detail-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--gap-md);
+}
+
+.room-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.room-detail-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.room-detail-value {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.text-positive {
+  color: var(--status-positive) !important;
+}
+
+.text-critical {
+  color: var(--status-critical) !important;
+}
+
+.room-detail-actions {
+  display: flex;
+  gap: var(--gap-sm);
+  margin-top: var(--gap-lg);
+}
+
+.room-detail-actions .btn {
+  font-size: 0.62rem;
+  padding: 8px 10px;
+}
+
+@media (max-width: 900px) {
+  .floorplan-main {
+    flex-direction: column;
+  }
+  .room-detail-panel {
+    width: 100%;
+  }
+}
