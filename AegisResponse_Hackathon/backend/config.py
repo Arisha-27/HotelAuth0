@@ -26,7 +26,7 @@ class Settings:
 
     # ── App ────────────────────────────────────────────────
     APP_NAME: str = "Aegis Hospitality OS"
-    APP_VERSION: str = "3.0.0"
+    APP_VERSION: str = "5.0.0"
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     HOST: str = os.getenv("HOST", "127.0.0.1")
     PORT: int = int(os.getenv("PORT", "8000"))
@@ -44,6 +44,24 @@ class Settings:
     TASK_QUEUE_WORKERS: int = int(os.getenv("TASK_QUEUE_WORKERS", "3"))
     MAX_RETRIES: int = int(os.getenv("MAX_RETRIES", "3"))
     RETRY_BASE_DELAY: float = float(os.getenv("RETRY_BASE_DELAY", "1.0"))
+
+    # ── Phase 5: Gmail API ─────────────────────────────────
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
+    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET", "")
+    GOOGLE_REFRESH_TOKEN: str = os.getenv("GOOGLE_REFRESH_TOKEN", "")
+    GMAIL_SENDER_EMAIL: str = os.getenv("GMAIL_SENDER_EMAIL", "aegis-os@aegis-hospitality.com")
+
+    # ── Phase 5: Notion API ────────────────────────────────
+    NOTION_API_KEY: str = os.getenv("NOTION_API_KEY", "")
+    NOTION_DATABASE_ID: str = os.getenv("NOTION_DATABASE_ID", "")
+
+    # ── Phase 5: Twilio SMS ────────────────────────────────
+    TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
+    TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
+    TWILIO_FROM_NUMBER: str = os.getenv("TWILIO_FROM_NUMBER", "+15551234567")
+
+    # ── Phase 5: Claude / Anthropic ────────────────────────
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
 
     def validate(self) -> list[str]:
         """Return list of missing required configuration keys."""

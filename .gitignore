@@ -6,3 +6,5 @@ venv/
 AegisResponse_Hackathon/.env
 AegisResponse_Hackathon/venv/
 AegisResponse_Hackathon/__pycache__/
+AegisResponse_Hackathon/backend/data/
+AegisResponse_Hackathon/logs/

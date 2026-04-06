@@ -1,8 +1,15 @@
+# Core
 fastapi
-uvicorn
+uvicorn[standard]
 httpx
 python-dotenv
+
+# Auth & Security
 python-jose[cryptography]>=3.3.0
 pydantic>=2.0.0
 cryptography>=41.0.0
+
+# System Metrics
 psutil>=5.9.0
+
+# Database (built-in sqlite3, no extra dep needed)

@@ -15,11 +15,14 @@ from backend.middleware.error_handler import register_error_handlers
 from backend.services.task_queue import task_queue
 from backend.auth.jwt_validator import _fetch_jwks
 
-# Routers
+# Routers — Phase 3
 from backend.routes.health import router as health_router
 from backend.routes.security import router as security_router
 from backend.routes.operations import router as ops_router
 from backend.routes.finance import router as finance_router
+
+# Router — Phase 5: External Integrations
+from backend.routes.integrations import router as integrations_router
 
 # Ensure structured logging is initialized immediately
 setup_logging(log_level=settings.LOG_LEVEL, log_file=settings.LOG_FILE)
@@ -32,14 +35,14 @@ async def lifespan(app: FastAPI):
     Lifespan events for startup and shutdown.
     Handles initializing background task queues and warming caches.
     """
-    logger.info("Initializing AHOS Backend...")
+    logger.info("═" * 60)
+    logger.info("🏨  AEGIS HOSPITALITY OS — Starting Up")
+    logger.info("═" * 60)
 
     # Load Auth0 configuration validation
     errors = settings.validate()
     if errors:
         logger.error(f"Configuration errors found: {errors}")
-        # Depending on strictness, we might raise SystemExit here
-        # for Hackathon, just warn:
         logger.warning("Proceeding despite missing Auth0 config for development.")
 
     # Pre-fetch Auth0 JWKS in the background
@@ -49,13 +52,31 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Could not fetch JWKS on startup: {e}")
 
-    # Start the orchestrator task queue
+    # Start the orchestrator task queue (Phase 3)
     task_queue.start()
     logger.info("Task Queue started")
 
+    # ── Phase 5: Initialize External Integrations ──
+    from backend.database.hotel_db import hotel_db
+    logger.info(f"📦 Database initialized: {len(hotel_db.get_hotels())} hotels loaded")
+
+    from backend.integrations.iot_service import iot_simulator
+    logger.info(f"🏗️  IoT Simulator: {len(iot_simulator.devices)} devices across 3 hotels")
+
+    from backend.integrations.gmail_service import gmail_service
+    from backend.integrations.notion_service import notion_service
+    from backend.integrations.twilio_service import twilio_service
+    logger.info(f"📧 Gmail: {'configured' if gmail_service.is_configured else 'mock mode'}")
+    logger.info(f"📋 Notion: {'configured' if notion_service.is_configured else 'mock mode'}")
+    logger.info(f"📱 Twilio: {'configured' if twilio_service.is_configured else 'mock mode'}")
+
+    logger.info("═" * 60)
+    logger.info("🚀  AHOS Phase 3+5 — All Systems READY")
+    logger.info("═" * 60)
+
     yield  # Application runs
 
-    logger.info("Shutting down AHOS Backend...")
+    logger.info("🛑 Shutting down AHOS Backend...")
     # Clean shutdown of queues
     await task_queue.stop(wait_completion=True)
     logger.info("Task Queue stopped safely")
@@ -65,7 +86,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="Aegis Hospitality OS Core Orchestrator",
+    description=(
+        "Aegis Hospitality OS — Research-Grade Multi-Agent Hotel Chain Operating System\n\n"
+        "**Phase 3**: Core Backend (Auth, Middleware, Orchestrator)\n"
+        "**Phase 5**: External Integrations (Gmail, Notion, Twilio, IoT, DB, Gateway, Monitoring)"
+    ),
     lifespan=lifespan,
 )
 
@@ -89,11 +114,14 @@ app.add_middleware(AuditLogMiddleware)
 # Register Global Error Handlers
 register_error_handlers(app)
 
-# Register API Routers
+# Register API Routers — Phase 3
 app.include_router(health_router)
 app.include_router(security_router)
 app.include_router(ops_router)
 app.include_router(finance_router)
+
+# Register API Router — Phase 5: External Integrations
+app.include_router(integrations_router, prefix="/api/v1")
 
 
 # Provide root endpoints to ease navigation
