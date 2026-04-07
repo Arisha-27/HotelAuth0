@@ -193,6 +193,6 @@ npm install
 # Start Vite hot-reload server
 npm run dev
 ```
-*The Interactive OS will surface gracefully on ``.*
+*The Interactive OS will surface gracefully on `https://hotel-auth0.vercel.app/`.*
 
 ---
