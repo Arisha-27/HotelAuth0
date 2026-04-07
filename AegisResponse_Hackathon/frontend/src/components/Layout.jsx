@@ -31,7 +31,6 @@ function TopBar() {
     return () => clearInterval(timer)
   }, [])
 
-  // Check backend health on mount
   useEffect(() => {
     fetchHealth()
       .then(() => setBackendUp(true))

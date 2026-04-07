@@ -33,18 +33,18 @@
 
 .topbar-logo {
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   letter-spacing: 0.18em;
   color: var(--accent-primary-light);
 }
 
 .topbar-divider {
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
 }
 
 .topbar-version {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
 }
 
@@ -55,7 +55,7 @@
 }
 
 .topbar-property {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--text-secondary);
@@ -64,11 +64,11 @@
 
 .topbar-separator {
   color: var(--border-default);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
 .topbar-time, .topbar-date {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
 }
 
@@ -79,14 +79,14 @@
 }
 
 .topbar-status {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .topbar-status-label {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--accent-primary-light);
   font-weight: 500;
   text-transform: uppercase;
@@ -128,7 +128,7 @@
 .sidebar .nav-item {
   white-space: nowrap;
   overflow: hidden;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 8px 10px;
@@ -171,7 +171,61 @@
 }
 
 .layout-main.expanded {
-  /* no special style needed, flex handles it */
+  /* flex handles expansion automatically */
+  flex: 1;
+}
+
+/* --- User Section in Topbar --- */
+.topbar-user-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border-default);
+}
+
+.topbar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+
+.topbar-user-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-primary);
+  object-fit: cover;
+}
+
+.topbar-user-name {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.topbar-logout-btn:hover {
+  color: var(--status-critical);
+  border-color: rgba(229, 57, 53, 0.3);
+  background: rgba(229, 57, 53, 0.08);
 }
 
 /* Responsive */

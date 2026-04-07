@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
+import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import FloorPlan from './pages/FloorPlan'
 import Agents from './pages/Agents'
@@ -14,6 +15,10 @@ import Advanced from './pages/Advanced'
 function App() {
   return (
     <Routes>
+      {/* Public landing page */}
+      <Route path="/landing" element={<Landing />} />
+
+      {/* Dashboard routes — no auth required */}
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="floor-plan" element={<FloorPlan />} />

@@ -80,7 +80,7 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -131,11 +131,11 @@ body {
 }
 
 .text-xs {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
 .text-sm {
-  font-size: 0.8rem;
+  font-size: 0.88rem;
 }
 
 .uppercase {
@@ -175,7 +175,7 @@ body {
 }
 
 .card-header h3 {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -192,7 +192,7 @@ body {
   align-items: center;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 3px;
@@ -315,7 +315,7 @@ body {
   justify-content: center;
   gap: 8px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -364,7 +364,7 @@ body {
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 400;
   transition: all var(--transition-fast);
   cursor: pointer;
@@ -386,7 +386,7 @@ body {
 /* --- Input --- */
 .input {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   background: var(--bg-surface-input);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-sm);
@@ -439,7 +439,7 @@ body {
   border-radius: var(--radius-sm);
   padding: 6px 10px;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   white-space: nowrap;
   opacity: 0;
@@ -478,9 +478,9 @@ body {
 
 /* --- Responsive helpers --- */
 @media (max-width: 1200px) {
-  html { font-size: 13px; }
+  html { font-size: 15px; }
 }
 
 @media (max-width: 768px) {
-  html { font-size: 12px; }
+  html { font-size: 14px; }
 }
