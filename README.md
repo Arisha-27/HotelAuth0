@@ -4,6 +4,7 @@
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![Python Backend](https://img.shields.io/badge/FastAPI-Python_3.10+-009688.svg?logo=fastapi)
 ![React Frontend](https://img.shields.io/badge/React-Vite_|_Three.js-61DAFB.svg?logo=react)
+![OpenClaw](https://img.shields.io/badge/Powered_by-OpenClaw-orange)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 > **Research-Grade Multi-Agent Hotel Chain Operating System** designed to flawlessly integrate cutting-edge AI agency, deep operational tooling, and human-in-the-loop security into a single, cohesive pane of glass. Originally developed as an advanced Hackathon project.
