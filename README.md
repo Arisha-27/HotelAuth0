@@ -12,7 +12,7 @@
 
 ## 📖 Overview
 
-Aegis Hospitality OS brings the power of **hierarchical LLM-agnostic agents** to hospitality management. It operates through various phases of technological evolution:
+Luniaris brings the power of **hierarchical LLM-agnostic agents** to hospitality management. It operates through various phases of technological evolution:
 
 *   **Phase 3**: Core backend foundation with Auth0 integration, Rate Limiting, Audit Middlewares, and Background Task Orchestrator.
 *   **Phase 4**: Hierarchical Agent System. An "Executive" agent delegates to Domain agents (Security, Operations, Finance), backed by a pluggable LLM "Brain" supporting OpenAI, Gemini, Mistral, Ollama, and Mock providers.
@@ -125,7 +125,7 @@ sequenceDiagram
 ## 📁 Repository Structure
 
 ```text
-AegisResponse_Hackathon/
+Lunaris/
 ├── backend/
 │   ├── agents/          # Multi-agent AI core (Executive, Domain, Sub-agents)
 │   ├── auth/            # Auth0 integrations and JWT validation 
@@ -193,6 +193,6 @@ npm install
 # Start Vite hot-reload server
 npm run dev
 ```
-*The Interactive OS will surface gracefully on `http://localhost:5173`.*
+*The Interactive OS will surface gracefully on ``.*
 
 ---
